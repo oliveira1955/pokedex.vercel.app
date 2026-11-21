@@ -1,6 +1,6 @@
-# Quasar App (teste)
+# Pokédex
 
-A Quasar Project
+Vitrine de Pokémon da primeira geração.
 
 ## Install the dependencies
 ```bash

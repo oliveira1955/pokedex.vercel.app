@@ -1,8 +1,8 @@
 {
-  "name": "teste",
+  "name": "pokedex",
   "version": "0.0.1",
-  "description": "A Quasar Project",
-  "productName": "Quasar App",
+  "description": "Vitrine de Pokémon da primeira geração.",
+  "productName": "Pokédex",
   "author": "oliveira1955 <olivera.sarahh@gmail.com>",
   "private": true,
   "scripts": {
