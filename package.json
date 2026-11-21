@@ -1,7 +1,7 @@
 {
   "name": "pokedex",
   "version": "0.0.1",
-  "description": "Vitrine de Pokémon da primeira geração.",
+  "description": "Vitrine de Pokémon de Kanto a Paldea.",
   "productName": "Pokédex",
   "author": "oliveira1955 <olivera.sarahh@gmail.com>",
   "private": true,

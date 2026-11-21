@@ -51,7 +51,7 @@ module.exports = configure(function (ctx) {
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-webpack/quasar-config-js#Property%3A-build
     build: {
-      vueRouterMode: 'hash', // available values: 'hash', 'history'
+      vueRouterMode: 'history', // available values: 'hash', 'history'
 
       // transpile: false,
       // publicPath: '/',
@@ -154,7 +154,7 @@ module.exports = configure(function (ctx) {
       manifest: {
         name: `Pokédex`,
         short_name: `Pokédex`,
-        description: `Vitrine de Pokémon da primeira geração.`,
+        description: `Vitrine de Pokémon de Kanto a Paldea.`,
         display: 'standalone',
         orientation: 'portrait',
         background_color: '#ffffff',

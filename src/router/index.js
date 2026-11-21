@@ -1,9 +1,13 @@
-import { createWebHistory, createRouter } from "vue-router";
+import { route } from "quasar/wrappers";
+import { createRouter, createWebHistory } from "vue-router";
 import routes from "./routes";
 
-const router = createRouter({
-  history: createWebHistory(),
+export default route(() => createRouter({
+  history: createWebHistory(process.env.VUE_ROUTER_BASE),
   routes,
-});
-
-export default router;
+  scrollBehavior(to, from, savedPosition) {
+    if (to.path === from.path) return false;
+    // The list restores its saved position after its cards are rendered.
+    return ["catalog", "favorites"].includes(to.name) ? false : savedPosition || { top: 0 };
+  },
+}));
