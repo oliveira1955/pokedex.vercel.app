@@ -103,17 +103,26 @@
 
       <template v-else-if="active === 'coverage'">
         <div class="help-heading"><h2>{{ t("coverage") }}</h2><TermHelp :label="t('coverage')" :text="t('defenseHelp')" /></div>
-        <dl class="defense-counts">
-          <div v-for="group in defenseCounts" :key="group.key" :data-defense="group.key">
-            <dt>{{ t(group.key) }}</dt><dd>{{ format(group.count) }}</dd>
-          </div>
-        </dl>
-        <section v-for="group in visibleDefenses" :key="group.damage" class="damage-group" :data-defense="group.key">
-          <h3>×{{ format(group.damage) }} · {{ t(group.key) }}</h3>
-          <ul class="damage-tags"><li v-for="type in group.types" :key="type">{{ typeLabel(type) }}</li></ul>
-        </section>
-        <button v-if="defenseGroups.some(group => group.damage === 1)" type="button" class="text-button"
-          :aria-pressed="showNeutral" @click="showNeutral = !showNeutral">{{ t(showNeutral ? "hideNeutral" : "showNeutral") }}</button>
+        <div class="defense-accordion">
+          <details v-for="category in defenseCategories" :key="category.key" :data-defense="category.key">
+            <summary>
+              <span class="defense-icon" aria-hidden="true">
+                <span class="material-icons">{{ category.icon }}</span>
+              </span>
+              <span>{{ t(category.key) }}</span>
+              <span class="defense-count">{{ format(category.count) }}</span>
+            </summary>
+            <div v-if="category.groups.length" class="defense-details">
+              <div v-for="group in category.groups" :key="group.damage" class="defense-multiplier">
+                <strong>×{{ format(group.damage) }}</strong>
+                <ul class="damage-tags">
+                  <li v-for="type in group.types" :key="type">{{ typeLabel(type) }}</li>
+                </ul>
+              </div>
+            </div>
+            <p v-else class="defense-empty">{{ t("noDefenseTypes") }}</p>
+          </details>
+        </div>
       </template>
 
       <template v-else-if="active === 'evolutions'">
@@ -121,7 +130,7 @@
         <p v-if="evolution.pending" role="status">{{ t("loading") }}</p>
         <p v-else-if="evolution.error" role="alert">{{ t("error") }} <button class="button" type="button" @click="loadEvolution">{{ t("retry") }}</button></p>
         <p v-else-if="!evolution.chain?.evolves_to.length">{{ t("noEvolutions") }}</p>
-        <ul v-else class="evolution-root"><EvolutionTree :node="evolution.chain" /></ul>
+        <ul v-else class="evolution-root"><EvolutionTree :node="evolution.chain" :current-species="species.name" /></ul>
       </template>
 
       <template v-else-if="active === 'moves'">
@@ -192,7 +201,6 @@ const status = ref("loading");
 const pokemon = shallowRef(null);
 const species = shallowRef(null);
 const shiny = ref(false);
-const showNeutral = ref(false);
 const message = ref("");
 const evolution = reactive({ pending: false, error: false, chain: null });
 const abilities = reactive({});
@@ -222,10 +230,15 @@ const defenseGroups = computed(() => {
   }
   return [...groups.values()].sort((a, b) => b.damage - a.damage);
 });
-const visibleDefenses = computed(() => defenseGroups.value.filter(group => showNeutral.value || group.damage !== 1));
-const defenseCounts = computed(() => ["weak", "resist", "immune"].map(key => ({
-  key, count: defenseGroups.value.filter(group => group.key === key).reduce((total, group) => total + group.types.length, 0),
-})));
+const defenseCategories = computed(() => [
+  { key: "weak", icon: "trending_up" },
+  { key: "resist", icon: "trending_down" },
+  { key: "neutral", icon: "remove" },
+  { key: "immune", icon: "block" },
+].map(({ key, icon }) => {
+  const groups = defenseGroups.value.filter(group => group.key === key);
+  return { key, icon, groups, count: groups.reduce((total, group) => total + group.types.length, 0) };
+}));
 const backTarget = computed(() => ["favorites", "comparison", "team"].includes(route.query.from) ? route.query.from : "catalog");
 const link = entry => ({ name: "pokemon", params: { name: entry.slug }, query: route.query.from ? { from: route.query.from } : {} });
 const measurement = (value, unit) => value == null ? t("missingData") : format(value / 10, { style: "unit", unit });

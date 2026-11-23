@@ -6,7 +6,7 @@
         <span class="ball" aria-hidden="true"></span> Pokédex
       </RouterLink>
       <nav :aria-label="t('catalog')">
-        <RouterLink :to="{ name: 'catalog' }"><span class="nav-icon" aria-hidden="true">▦</span>{{ t("catalog") }}</RouterLink>
+        <RouterLink :to="{ name: 'catalog' }"><span class="nav-icon catalog-icon material-icons" aria-hidden="true">grid_view</span>{{ t("catalog") }}</RouterLink>
         <RouterLink :to="{ name: 'favorites' }"><span class="nav-icon" aria-hidden="true">♥</span>{{ t("favorites") }} <small>{{ collections.favorites.length }}</small></RouterLink>
         <RouterLink :to="{ name: 'comparison' }"><span class="nav-icon" aria-hidden="true">⇄</span>{{ t("compare") }} <small>{{ collections.comparison.length }}/2</small></RouterLink>
         <RouterLink :to="{ name: 'team' }"><span class="nav-icon" aria-hidden="true">♧</span>{{ t("team") }} <small>{{ collections.team.length }}/6</small></RouterLink>
